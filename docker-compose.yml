@@ -1,0 +1,18 @@
+# Явное имя: иначе из пути с кириллицей Compose может получить пустое имя проекта
+# и выдать: "project name must not be empty"
+name: passapp
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: passapp
+      POSTGRES_PASSWORD: passapp
+      POSTGRES_DB: passapp
+    ports:
+      - "5433:5432"
+    volumes:
+      - passapp_pgdata:/var/lib/postgresql/data
+
+volumes:
+  passapp_pgdata:
