@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import express from "express";
 import cors from "cors";
 import { authRouter } from "./routes/auth.js";
@@ -16,6 +18,14 @@ app.use(
   })
 );
 app.use(express.json());
+
+const clientDist = path.resolve(process.cwd(), "../client/dist");
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get("/*", (_req, res) => {
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+}
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true });
