@@ -45,13 +45,15 @@ jobs:
 
       - name: Build Docker image
         run: |
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
           docker build \
-            --tag ghcr.io/${{ toLower(github.repository) }}:latest \
+            --tag "${IMAGE_NAME}" \
             .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ toLower(github.repository) }}:latest
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
+          docker push "${IMAGE_NAME}"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
