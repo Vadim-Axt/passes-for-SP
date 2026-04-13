@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   build:
     name: Build, test, and publish container
@@ -37,6 +41,7 @@ jobs:
         run: npm --prefix server run build
 
       - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v4
         with:
           registry: ghcr.io
@@ -51,6 +56,7 @@ jobs:
             .
 
       - name: Push Docker image
+        if: github.event_name != 'pull_request'
         run: |
           IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}:latest"
           docker push "${IMAGE_NAME}"
